@@ -1,0 +1,9 @@
+@import "~styles/colors.scss";
+
+.Button {
+  background-color: $primary;
+  border: 0;
+  border-radius: 4px;
+  padding: 16px 8px;
+  color: $greyWhite;
+}

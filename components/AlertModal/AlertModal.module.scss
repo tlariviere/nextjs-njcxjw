@@ -1,0 +1,11 @@
+.AlertModal {
+  gap: 16px;
+
+  .message {
+    font-style: italic;
+  }
+
+  .button {
+    align-self: flex-end;
+  }
+}

@@ -1,5 +1,7 @@
-import Head from 'next/head';
-import * as React from 'react';
+import Head from "next/head";
+import * as React from "react";
+
+import Exercice1 from "containers/Exercice/Exercice1";
 
 export default function Home() {
   return (
@@ -9,14 +11,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <p>
-          Check <code>exercices/</code> folder.
-          <br />
-          <b>
-            No need to manipulate pages - your code does not have to be used
-            into pages !
-          </b>
-        </p>
+        <Exercice1 />
       </main>
     </div>
   );

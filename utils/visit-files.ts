@@ -1,13 +1,15 @@
-type File = {
-  type: 'file';
+interface File {
+  type: "file";
   name: string;
-};
+}
 
-type Directory = {
-  type: 'directory';
+interface Directory {
+  type: "directory";
   name: string;
   children: (File | Directory)[];
-};
+}
+
+const isFile = (item: File | Directory): item is File => item.type === "file";
 
 /**
  * Traverse files & directories.
@@ -15,23 +17,75 @@ type Directory = {
  * Return a list of every files filtered by given function.
  */
 export const visitFiles = (
-  root: unknown, // TODO
-  filterFn: unknown // TODO
-): unknown[] => {
-  // TODO
-};
+  root: Directory,
+  filterFn: (file: File) => boolean
+): File[] =>
+  root.children.reduce((files, child) => {
+    if (isFile(child)) {
+      return filterFn(child) ? files.concat(child) : files;
+    }
+
+    return [...files, ...visitFiles(child, filterFn)];
+  }, []);
 
 // Use example
-const filteredFiles = visitFiles(
-  null, // TODO use a concrete root example
-  (file) => {
-    const name = file.name;
+const root: Directory = {
+  type: "directory",
+  name: "/",
+  children: [
+    {
+      type: "file",
+      name: "abcba",
+    },
+    {
+      type: "file",
+      name: "foo",
+    },
+    {
+      type: "directory",
+      name: "bar",
+      children: [],
+    },
+    {
+      type: "directory",
+      name: "baz",
+      children: [
+        {
+          type: "file",
+          name: "bcdcb",
+        },
+        {
+          type: "file",
+          name: "foo",
+        },
+      ],
+    },
+    {
+      type: "directory",
+      name: "beef",
+      children: [
+        {
+          type: "directory",
+          name: "foo",
+          children: [
+            {
+              type: "file",
+              name: "cdedc",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
-    for (let i = 0; i < Math.floor(name.length) / 2; i++) {
-      if (name[i] != name[name.length - 1 - i]) {
-        return false;
-      }
+const filteredFiles = visitFiles(root, (file) => {
+  const name = file.name;
+
+  for (let i = 0; i < Math.floor(name.length) / 2; i++) {
+    if (name[i] != name[name.length - 1 - i]) {
+      return false;
     }
-    return true;
   }
-);
+  return true;
+});
